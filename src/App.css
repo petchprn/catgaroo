@@ -1,0 +1,67 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.App {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App-header {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #282c34;
+}
+
+.App-header img {
+  max-width: 100%; /* Full width */
+  max-height: 100vh; /* Full height on desktop */
+  object-fit: contain; /* Maintain aspect ratio without cropping */
+  margin: auto; /* Center the image */
+}
+
+.scene-text {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 350px;
+  color: black;
+  text-align: center;
+  pointer-events: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.scene-text.show {
+  opacity: 1;
+}
+
+/* Mobile adjustments for full screen */
+@media (max-width: 768px) {
+  .App-header img {
+    height: 100vh; /* Full height */
+    width: 100vw; /* Full width */
+    object-fit: cover; /* Cover the entire viewport */
+  }
+
+  .scene-text {
+    top: 5%;
+    max-width: 100%;
+  }
+}
