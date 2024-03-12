@@ -8,16 +8,32 @@ type Scene = {
 
 const scenes: Scene[] = [
   {
-    frames: ['Trigger warning-1.jpg', 'Trigger warning-2.jpg', 'Trigger warning-3.jpg', 'Trigger warning.gif'],
+    frames: ['loading0.jpg', 'loading1.jpg', 'loading2.jpg', 'loading3.jpg', 'loading4.jpg', 'loading5.jpg','loading.gif'],
     texts: ["Trigger warning: เกมส์นี้ มีเนื้อหาที่ ... \n<แตะหรือคลิ๊กเพื่อไปต่อ>"]
   },
   {
-    frames: ['cut-1.jpg', 'cut-2.jpg', 'cut-3.jpg', 'cut-4.jpg', 'cut-5.jpg', 'cut-6.jpg', 'cut-7.jpg', 'cut-8.jpg', 'cut-9.jpg', 'cut-1.jpg', 's3-1.jpg', 's3-2.jpg', 's4-1.gif'],
-    texts: ["สิ่งที่ชัดเจนที่สุดที่เหตุการณ์ร้ายได้ฝากไว้ "]
+    frames: ['intro0.jpg','intro1.jpg','intro2.jpg','intro3.jpg','intro.gif'],
+    texts: ["เธอเป็นแมว", "ตอนนี้เธออยู่ที่ 'กองบัญชาการแมว' ", "ให้เรื่องนี้เป็นความลับระหว่างเรานะ","จริง ๆ แล้ว \nแมวทุกตัวบนโลกกำลังทำภารกิจลับที่ได้รับมอบหมาย \nทั้งสอดส่องดูแล สำรวจ สืบสวนสอบสวน \nรวมถึงการฝึกแลดูแลมนุษย์ในรูปแบบต่าง ๆ","เช่น ฝึกการตรงต่อเวลา (ในการให้อาหาร), \nฝึกกล้ามเนื้อมัดเล็ก (ตอนเกาคางและจกพุง), \nหรือแม้แต่การฝึกความแข็งแรงของผิวหนัง (จากเล็บและเขี้ยว) ","ซึ่งเป้าหมายสูงสุดของพวกเรา คือ \nการดูแลความสงบสุขของมนุษยชาติ", "เธอเป็นแมวแล้ว จะตั้งชื่อให้ตัวเองว่าอะไรดี?\n_ _ _ _ _"]
   },
   {
-    frames: ['heart1.jpg', 'heart2.jpg', 'heart3.jpg', 'heart4.jpg', 'heart5.jpg', 'heart.gif'],
-    texts: ["ก็คือสัญลักษณ์สีแดงโลหิตที่อกข้างซ้าย "]
+    frames: ['intro10.jpg', 'intro11.jpg', 'intro12.jpg', 'intro13.jpg', 'intro2.gif'],
+    texts: ["เมี้ยว ~ ~ ~ \n  สวัสดี {name} "]
+  },
+  {
+    frames: ['white.jpg'],
+    texts: ["ชื่อ {name} เพราะจัง\nเธอเหมาะมากที่จะเป็นแมวสังเกตการณ์\n หน้าที่ของเธอคือการเก็บข้อมูลต่าง ๆ\n และช่วยบอกใบ้ทางออกให้กับมนุษย์\n . \nพลังวิเศษของเธอคือ\nเมื่อเธอเข้าไปทักทายมนุษย์ มนุษย์จะบอกเล่าความรู้สึก\nและเรื่องราวของพวกเขาให้เธอฟัง"]
+  },
+  {
+    frames: ['intro0.jpg','intro1.jpg','intro2.jpg','intro3.jpg','intro.gif'],
+    texts: ["ภารกิจแรกของ {name} พร้อมแล้ว\n{name} ล่ะ พร้อมมั้ย?"]
+  },
+  {
+    frames: ['city0.jpg','city1.jpg','city2.jpg','city3.jpg'],
+    texts: ["ณ ดินแดนทักษิณ","สถานที่ซึ่งดินแดนทั้งสามถูกผูกรวม\nด้วยเรื่องร้ายในอดีตที่เกิดขึ้นเมื่อ 19 ปีที่แล้ว"]
+  },
+  {
+    frames: ['city4.jpg','city5.jpg','city6.jpg','city7.jpg','city8.jpg','city9.jpg','city10.jpg','city11.jpg','city12.jpg','city13.jpg','city14.jpg','city15.jpg','city16.jpg','city17.jpg','city18.jpg','city19.jpg','city20.jpg','city21.jpg','city22.jpg','city23.jpg','city24.jpg','city25.jpg','city26.jpg','city27.jpg','city28.jpg','city29.jpg','city30.jpg','city31.jpg','city32.jpg','city33.jpg','city34.jpg','city35.jpg','city36.jpg','city.gif'],
+    texts: ["เหตุการณครั้งนั้นได้เปลี่ยนชีวิตของชาวเมือง\nไปโดยสิ้นเชิง"]
   },
   // ... and so on for each scene
 ];
@@ -51,26 +67,34 @@ const App: React.FC = () => {
 
   const handleSceneClick = useCallback(() => {
     if (showText) {
-      if (currentSceneIndex === 1 && currentTextIndex < scenes[currentSceneIndex].texts.length - 1) {
-        setShowText(false); 
+      if (currentTextIndex < scenes[currentSceneIndex].texts.length - 1) {
+        setShowText(false);
         setTimeout(() => {
           setCurrentTextIndex(currentTextIndex + 1);
           setShowText(true);
-        }, 2000); 
+        }, 1000); // Adjust this timeout as needed.
       } else {
         setShowText(false);
         setTimeout(() => {
-          setCurrentSceneIndex((prevIndex) => (prevIndex + 1) % scenes.length);
+          const nextSceneIndex = (currentSceneIndex + 1) % scenes.length;
+          setCurrentSceneIndex(nextSceneIndex);
           setCurrentFrameIndex(0);
           setCurrentTextIndex(0);
-        }, 2000);
+          if (scenes[nextSceneIndex].texts.length > 0) {
+            setShowText(true);
+          }
+        }, 1000); // Adjust this timeout as needed.
+      }
+    } else {
+      if (scenes[currentSceneIndex].texts.length > 0) {
+        setShowText(true);
       }
     }
-  }, [currentSceneIndex, currentTextIndex, showText, currentFrameIndex]);
+  }, [currentSceneIndex, currentTextIndex, showText, scenes]);
 
   const currentScene = scenes[currentSceneIndex];
   const currentFrame = currentScene.frames[currentFrameIndex];
-  const textLines = currentScene.texts[currentTextIndex].split('\n').map((line, index) => (
+  const textLines = currentScene.texts[currentTextIndex]?.split('\n').map((line, index) => (
     <div key={index}>{line}</div>
   ));
 
