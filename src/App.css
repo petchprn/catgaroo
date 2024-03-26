@@ -54,7 +54,7 @@ html, body, #root {
 
 .scene-text {
   font-family: 'Noto';
-  font-size: 10pt;
+  font-size: 12pt;
   max-width: 80vw;
   color: black;
   text-align: center;
