@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { type Scene, scenes } from './types';
 
 export const useSceneLogic = () => {
-  const [currentSceneIndex, setCurrentSceneIndex] = useState<number>(0);
+  const [currentSceneId, setCurrentSceneId] = useState<string>(scenes[0].id);
   const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
   const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
   const [showText, setShowText] = useState<boolean>(false);
@@ -22,7 +22,9 @@ export const useSceneLogic = () => {
 
   useEffect(() => {
     let id: number;
-    const currentScene = scenes[currentSceneIndex];
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (!currentScene) return;
+
     const lastFrameIndex = currentScene.frames.length - 1;
 
     if (currentFrameIndex < lastFrameIndex) {
@@ -39,32 +41,32 @@ export const useSceneLogic = () => {
     return () => {
       window.clearTimeout(id);
     };
-  }, [currentFrameIndex, currentSceneIndex]);
+  }, [currentFrameIndex, currentSceneId]);
 
-  const jumpToScene = useCallback((newSceneIndex: number) => {
-    if (newSceneIndex >= 0 && newSceneIndex < scenes.length) {
-      (scenes[newSceneIndex] as Scene); 
-      setIsTransitioning(true);
-      setShowText(false);
+  const jumpToScene = useCallback((newSceneId: string) => {
+    const newScene = scenes.find(scene => scene.id === newSceneId);
+    if (newScene) {
       setIsTransitioning(true);
       setShowText(false);
       setTimeout(() => {
-        setCurrentSceneIndex(newSceneIndex);
+        setCurrentSceneId(newSceneId);
         setCurrentFrameIndex(0);
         setCurrentTextIndex(0);
         setIsTransitioning(false);
       }, 300);
     }
   }, []);
+
   const handleSceneClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLInputElement || isTransitioning) {
       return;
     }
 
-    const currentScene = scenes[currentSceneIndex];
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (!currentScene) return;
 
-    if (currentScene.leftClick !== undefined || currentScene.rightClick !== undefined || currentScene.choices) {
-      return; // Don't handle general clicks for scenes with left/right clicks or choices
+    if (currentScene.choices) {
+      return; // Don't handle general clicks for scenes with choices
     }
 
     if (showText) {
@@ -74,58 +76,61 @@ export const useSceneLogic = () => {
           setCurrentTextIndex(currentTextIndex + 1);
           setShowText(true);
         }, 300);
-      } else if (!currentScene.choices) {
-        // Only move to the next scene if there are no choices
-        jumpToScene((currentSceneIndex + 1) % scenes.length);
+      } else if (currentScene.nextSceneId) {
+        jumpToScene(currentScene.nextSceneId);
       }
+      // Remove the else block that moved to the next scene in the array
     } else {
       setShowText(true);
     }
-  }, [currentSceneIndex, currentTextIndex, showText, isTransitioning, jumpToScene]);
+  }, [currentSceneId, currentTextIndex, showText, isTransitioning, jumpToScene]);
 
   const handleLeftClick = useCallback(() => {
-    const currentScene = scenes[currentSceneIndex];
-    if (currentScene.leftClick !== undefined && !isTransitioning) {
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (currentScene?.leftClick && !isTransitioning) {
       jumpToScene(currentScene.leftClick);
     }
-  }, [currentSceneIndex, isTransitioning, jumpToScene]);
+  }, [currentSceneId, isTransitioning, jumpToScene]);
 
   const handleRightClick = useCallback(() => {
-    const currentScene = scenes[currentSceneIndex];
-    if (currentScene.rightClick !== undefined && !isTransitioning) {
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (currentScene?.rightClick && !isTransitioning) {
       jumpToScene(currentScene.rightClick);
     }
-  }, [currentSceneIndex, isTransitioning, jumpToScene]);
+  }, [currentSceneId, isTransitioning, jumpToScene]);
 
   const handleChoice = useCallback((choiceIndex: number) => {
-    const currentScene = scenes[currentSceneIndex];
-    if (currentScene.choices && currentScene.choices[choiceIndex]) {
-      const nextSceneIndex = currentScene.choices[choiceIndex].nextScene;
-      jumpToScene(nextSceneIndex);
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (currentScene?.choices && currentScene.choices[choiceIndex]) {
+      const nextSceneId = currentScene.choices[choiceIndex].nextSceneId;
+      jumpToScene(nextSceneId);
     }
-  }, [currentSceneIndex, jumpToScene]);
+  }, [currentSceneId, jumpToScene]);
 
   const goToPreviousScene = useCallback(() => {
     if (!isTransitioning) {
-      const newIndex = currentSceneIndex > 0 ? currentSceneIndex - 1 : scenes.length - 1;
-      jumpToScene(newIndex);
+      const currentIndex = scenes.findIndex(scene => scene.id === currentSceneId);
+      const newIndex = currentIndex > 0 ? currentIndex - 1 : scenes.length - 1;
+      jumpToScene(scenes[newIndex].id);
     }
-  }, [currentSceneIndex, isTransitioning, jumpToScene]);
+  }, [currentSceneId, isTransitioning, jumpToScene]);
 
   const goToNextScene = useCallback(() => {
     if (!isTransitioning) {
-      const newIndex = (currentSceneIndex + 1) % scenes.length;
-      jumpToScene(newIndex);
+      const currentScene = scenes.find(scene => scene.id === currentSceneId);
+      if (currentScene && currentScene.nextSceneId) {
+        jumpToScene(currentScene.nextSceneId);
+      }
     }
-  }, [currentSceneIndex, isTransitioning, jumpToScene]);
+  }, [currentSceneId, isTransitioning, jumpToScene]);
 
   const handleNameInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   }, []);
 
   return {
-    currentScene: scenes[currentSceneIndex],
-    currentSceneIndex,
+    currentScene: scenes.find(scene => scene.id === currentSceneId),
+    currentSceneId,
     currentFrameIndex,
     currentTextIndex,
     showText,

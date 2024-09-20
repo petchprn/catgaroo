@@ -3,42 +3,39 @@
 import React, { useState } from 'react';
 
 interface DevNavProps {
-  currentSceneIndex: number;
-  totalScenes: number;
+  currentSceneId: string;
+  scenes: Scene[];
   goToPreviousScene: () => void;
   goToNextScene: () => void;
-  jumpToScene: (sceneIndex: number) => void;
+  jumpToScene: (sceneId: string) => void;
 }
 
 const DevNav: React.FC<DevNavProps> = ({
-  currentSceneIndex,
-  totalScenes,
+  currentSceneId,
+  scenes,
   goToPreviousScene,
   goToNextScene,
   jumpToScene,
 }) => {
-  const [inputSceneIndex, setInputSceneIndex] = useState('');
+  const [inputSceneId, setInputSceneId] = useState('');
 
   const handleJumpToScene = () => {
-    const sceneIndex = parseInt(inputSceneIndex, 10) - 1; 
-    if (!isNaN(sceneIndex) && sceneIndex >= 0 && sceneIndex < totalScenes) {
-      jumpToScene(sceneIndex);
-      setInputSceneIndex('');
+    if (inputSceneId && scenes.some(scene => scene.id === inputSceneId)) {
+      jumpToScene(inputSceneId);
+      setInputSceneId('');
     }
   };
 
   return (
     <div className="dev-nav">
       <button onClick={goToPreviousScene}>&larr;</button>
-      <span>{`${currentSceneIndex + 1} / ${totalScenes}`}</span>
+      <span>{`${currentSceneId}`}</span>
       <button onClick={goToNextScene}>&rarr;</button>
       <input
-        type="number"
-        value={inputSceneIndex}
-        onChange={(e) => setInputSceneIndex(e.target.value)}
+        type="text"
+        value={inputSceneId}
+        onChange={(e) => setInputSceneId(e.target.value)}
         placeholder="Jump to scene"
-        min="1"
-        max={totalScenes}
       />
       <button onClick={handleJumpToScene}>Jump</button>
     </div>
