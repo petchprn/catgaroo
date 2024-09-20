@@ -10,7 +10,7 @@ import { scenes } from './types';
 const App: React.FC = () => {
   const {
     currentScene,
-    currentSceneIndex,
+    currentSceneId,
     currentFrameIndex,
     currentTextIndex,
     showText,
@@ -32,22 +32,24 @@ const App: React.FC = () => {
   return (
     <div className="App" onClick={handleSceneClick}>
       <header className="App-header">
-        <SceneRenderer
-          scene={currentScene}
-          currentFrameIndex={currentFrameIndex}
-          showText={showText}
-          currentTextIndex={currentTextIndex}
-          userName={userName}
-          isTransitioning={isTransitioning}
-          onNameInput={handleNameInput}
-          onLeftClick={handleLeftClick}
-          onRightClick={handleRightClick}
-          onChoice={handleChoice}
-        />
+        {currentScene && (
+          <SceneRenderer
+            scene={currentScene}
+            currentFrameIndex={currentFrameIndex}
+            showText={showText}
+            currentTextIndex={currentTextIndex}
+            userName={userName}
+            isTransitioning={isTransitioning}
+            onNameInput={handleNameInput}
+            onLeftClick={handleLeftClick}
+            onRightClick={handleRightClick}
+            onChoice={handleChoice}
+          />
+        )}
         {showDevNav && (
           <DevNav
-            currentSceneIndex={currentSceneIndex}
-            totalScenes={scenes.length}
+            currentSceneId={currentSceneId}
+            scenes={scenes}
             goToPreviousScene={goToPreviousScene}
             goToNextScene={goToNextScene}
             jumpToScene={jumpToScene}

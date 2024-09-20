@@ -34,14 +34,16 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
     .split('\n')
     .map((line, index) => <div key={index}>{line.replace(/\$name\$/g, userName)}</div>);
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (scene.choices) return; // Don't handle clicks if there are choices
+  const handleInteraction = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (scene.choices) return; // Don't handle interactions if there are choices
 
-    const { clientX, currentTarget } = event;
+    const { clientX, currentTarget } = 'touches' in event 
+      ? { clientX: event.touches[0].clientX, currentTarget: event.currentTarget }
+      : event;
     const { left, width } = currentTarget.getBoundingClientRect();
-    const clickPosition = (clientX - left) / width;
+    const interactionPosition = (clientX - left) / width;
 
-    if (clickPosition < 0.5) {
+    if (interactionPosition < 0.5) {
       onLeftClick();
     } else {
       onRightClick();
@@ -51,7 +53,8 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   return (
     <div 
       className={`scene-container ${isTransitioning ? 'transitioning' : ''} ${currentFrame === 'black' ? 'black-background' : ''}`} 
-      onClick={handleClick}
+      onMouseDown={handleInteraction}
+      onTouchStart={handleInteraction}
     >
       {currentFrame !== 'black' && <img src={`/${currentFrame}`} alt={`Current Scene`} />}
       <div className={`scene-text-container text-${scene.textPosition}`}>

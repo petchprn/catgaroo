@@ -1,7 +1,7 @@
 // useSceneLogic.ts
 
 import { useState, useEffect, useCallback } from 'react';
-import { type Scene, scenes } from './types';
+import { scenes } from './types';
 
 export const useSceneLogic = () => {
   const [currentSceneId, setCurrentSceneId] = useState<string>(scenes[0].id);
@@ -87,15 +87,15 @@ export const useSceneLogic = () => {
 
   const handleLeftClick = useCallback(() => {
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene?.leftClick && !isTransitioning) {
-      jumpToScene(currentScene.leftClick);
+    if (currentScene?.leftClick !== undefined && !isTransitioning) {
+      jumpToScene(currentScene.leftClick.toString());
     }
   }, [currentSceneId, isTransitioning, jumpToScene]);
 
   const handleRightClick = useCallback(() => {
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene?.rightClick && !isTransitioning) {
-      jumpToScene(currentScene.rightClick);
+    if (currentScene?.rightClick !== undefined && !isTransitioning) {
+      jumpToScene(currentScene.rightClick.toString());
     }
   }, [currentSceneId, isTransitioning, jumpToScene]);
 

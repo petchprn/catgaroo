@@ -1,6 +1,7 @@
 // DevNav.tsx
 
 import React, { useState } from 'react';
+import { Scene } from './types'; // Adjust the import path as needed
 
 interface DevNavProps {
   currentSceneId: string;
