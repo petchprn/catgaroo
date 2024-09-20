@@ -14,6 +14,7 @@ interface SceneRendererProps {
   onLeftClick: () => void;
   onRightClick: () => void;
   onChoice: (choiceIndex: number) => void;
+  isLoaded: boolean;
 }
 
 const SceneRenderer: React.FC<SceneRendererProps> = ({
@@ -27,7 +28,12 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   onLeftClick,
   onRightClick,
   onChoice,
+  isLoaded,
 }) => {
+  if (!isLoaded) {
+    return <div className="loading">Loading...</div>;
+  }
+
   const currentFrame = Array.isArray(scene.frames) ? scene.frames[currentFrameIndex] : scene.frames;
   const textLines = scene.texts[currentTextIndex]
     ?.replace(/\$input_name\$/g, '')

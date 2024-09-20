@@ -10,6 +10,24 @@ export const useSceneLogic = () => {
   const [showText, setShowText] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [loadedScenes, setLoadedScenes] = useState<Set<string>>(new Set());
+
+  const preloadImages = useCallback((sceneId: string) => {
+    const scene = scenes.find(s => s.id === sceneId);
+    if (scene && !loadedScenes.has(sceneId)) {
+      const imagesToLoad = Array.isArray(scene.frames) ? scene.frames : [scene.frames];
+      Promise.all(imagesToLoad.map(src => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = src.startsWith('/') ? src : `/${src}`;
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      })).then(() => {
+        setLoadedScenes(prev => new Set(prev).add(sceneId));
+      });
+    }
+  }, [loadedScenes]);
 
   useEffect(() => {
     scenes.forEach(scene => {
@@ -128,6 +146,14 @@ export const useSceneLogic = () => {
     setUserName(event.target.value);
   }, []);
 
+  useEffect(() => {
+    preloadImages(currentSceneId);
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (currentScene && currentScene.nextSceneId) {
+      preloadImages(currentScene.nextSceneId);
+    }
+  }, [currentSceneId, preloadImages]);
+
   return {
     currentScene: scenes.find(scene => scene.id === currentSceneId),
     currentSceneId,
@@ -144,5 +170,6 @@ export const useSceneLogic = () => {
     goToPreviousScene,
     goToNextScene,
     handleChoice,
+    loadedScenes,
   };
 };

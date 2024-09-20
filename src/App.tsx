@@ -24,6 +24,7 @@ const App: React.FC = () => {
     goToPreviousScene,
     goToNextScene,
     handleChoice,
+    loadedScenes,
   } = useSceneLogic();
 
   // DevNav UI
@@ -44,6 +45,7 @@ const App: React.FC = () => {
             onLeftClick={handleLeftClick}
             onRightClick={handleRightClick}
             onChoice={handleChoice}
+            isLoaded={loadedScenes.has(currentSceneId)}
           />
         )}
         {showDevNav && (
