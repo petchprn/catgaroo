@@ -103,7 +103,7 @@ html, body, #root {
 
 .text-top {
   align-items: flex-start;
-  padding-top: 10vh;
+  padding-top: 15vh;
 }
 
 .text-middle {
@@ -112,7 +112,7 @@ html, body, #root {
 
 .text-bottom {
   align-items: flex-end;
-  padding-bottom: 10vh;
+  padding-bottom: 15vh;
 }
 
 .text-color-black { color: black; }
@@ -143,7 +143,7 @@ html, body, #root {
 
 .choices-container {
   position: absolute;
-  bottom: 20px;
+  bottom: 60px;
   left: 0;
   right: 0;
   display: flex;
@@ -252,7 +252,7 @@ html, body, #root {
 
 @media (max-height: 600px) {
   .choices-container {
-    bottom: 10px;
+    bottom: 20px;
   }
 }
 

@@ -48,11 +48,12 @@ export const useSceneLogic = () => {
     if (currentFrameIndex < lastFrameIndex) {
       id = window.setTimeout(() => {
         setCurrentFrameIndex(currentFrameIndex + 1);
+        setShowText(false);
       }, 400);
     } else {
       id = window.setTimeout(() => {
         setIsTransitioning(false);
-        setShowText(true);
+        setShowText(true); // Show text only when the last frame is reached
       }, 500);
     }
 
@@ -71,57 +72,53 @@ export const useSceneLogic = () => {
         setCurrentFrameIndex(0);
         setCurrentTextIndex(0);
         setIsTransitioning(false);
+        setShowText(true);
       }, 300);
     }
   }, []);
 
   const handleSceneClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLInputElement || isTransitioning) {
+      console.log('Ignoring click: input or transitioning');
       return;
     }
 
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (!currentScene) return;
+    if (!currentScene) {
+      console.log('No current scene found');
+      return;
+    }
 
     if (currentScene.choices) {
-      return; // Don't handle general clicks for scenes with choices
+      console.log('Ignoring click: scene has choices');
+      return;
     }
+
+    console.log('Current text index:', currentTextIndex);
+    console.log('Total texts in scene:', currentScene.texts.length);
 
     if (showText) {
       if (currentTextIndex < currentScene.texts.length - 1) {
+        console.log('Moving to next text');
         setShowText(false);
         setTimeout(() => {
-          setCurrentTextIndex(currentTextIndex + 1);
+          setCurrentTextIndex(prevIndex => {
+            console.log('New text index:', prevIndex + 1);
+            return prevIndex + 1;
+          });
           setShowText(true);
         }, 300);
       } else if (currentScene.nextSceneId) {
+        console.log('Moving to next scene:', currentScene.nextSceneId);
         jumpToScene(currentScene.nextSceneId);
+      } else {
+        console.log('No more texts or next scene');
       }
-      // Remove the else block that moved to the next scene in the array
     } else {
+      console.log('Showing text');
       setShowText(true);
     }
   }, [currentSceneId, currentTextIndex, showText, isTransitioning, jumpToScene]);
-
-  const handleLeftClick = useCallback(() => {
-    const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene?.leftClick !== undefined && !isTransitioning) {
-      jumpToScene(currentScene.leftClick.toString());
-    }
-  }, [currentSceneId, isTransitioning, jumpToScene]);
-
-  const handleRightClick = useCallback(() => {
-    const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene) {
-      if (currentScene.texts[currentTextIndex]?.includes('$input_name$')) {
-        // If we're on the name input scene, don't allow progression
-        return;
-      }
-      if (currentScene.nextSceneId) {
-        jumpToScene(currentScene.nextSceneId);
-      }
-    }
-  }, [currentSceneId, currentTextIndex, jumpToScene]);
 
   const handleChoice = useCallback((choiceIndex: number) => {
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
@@ -181,8 +178,6 @@ export const useSceneLogic = () => {
     isTransitioning,
     handleSceneClick,
     handleNameInput,
-    handleLeftClick,
-    handleRightClick,
     jumpToScene,
     goToPreviousScene,
     goToNextScene,

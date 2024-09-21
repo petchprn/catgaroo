@@ -18,8 +18,6 @@ const App: React.FC = () => {
     isTransitioning,
     handleSceneClick,
     handleNameInput,
-    handleLeftClick,
-    handleRightClick,
     jumpToScene,
     goToPreviousScene,
     goToNextScene,
@@ -29,7 +27,7 @@ const App: React.FC = () => {
   } = useSceneLogic();
 
   // DevNav UI
-  const showDevNav = true;
+  const showDevNav = false;
 
   return (
     <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
@@ -43,8 +41,6 @@ const App: React.FC = () => {
             userName={userName}
             isTransitioning={isTransitioning}
             onNameInput={handleNameInput}
-            onLeftClick={handleLeftClick}
-            onRightClick={handleRightClick}
             onChoice={handleChoice}
             isLoaded={loadedScenes.has(currentSceneId)}
             onNameSubmit={handleNameSubmit}

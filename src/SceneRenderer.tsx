@@ -11,8 +11,6 @@ interface SceneRendererProps {
   userName: string;
   isTransitioning: boolean;
   onNameInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onLeftClick: () => void;
-  onRightClick: () => void;
   onChoice: (choiceIndex: number) => void;
   isLoaded: boolean;
   onNameSubmit: (name: string) => boolean;
@@ -26,8 +24,6 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   userName,
   isTransitioning,
   onNameInput,
-  onLeftClick,
-  onRightClick,
   onChoice,
   isLoaded,
   onNameSubmit,
@@ -37,63 +33,50 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   }
 
   const currentFrame = Array.isArray(scene.frames) ? scene.frames[currentFrameIndex] : scene.frames;
-  const textLines = scene.texts[currentTextIndex]
+  const isLastFrame = Array.isArray(scene.frames) && currentFrameIndex === scene.frames.length - 1;
+  const currentText = scene.texts[currentTextIndex];
+  console.log('Rendering text:', currentText);
+  const textLines = currentText
     ?.replace(/\$input_name\$/g, '')
     .split('\n')
     .map((line, index) => <div key={index}>{line.replace(/\$name\$/g, userName)}</div>);
 
-  const handleInteraction = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if (scene.choices || scene.texts[currentTextIndex]?.includes('$input_name$')) return;
-
-    const { clientX, currentTarget } = 'touches' in event 
-      ? { clientX: event.touches[0].clientX, currentTarget: event.currentTarget }
-      : event;
-    const { left, width } = currentTarget.getBoundingClientRect();
-    const interactionPosition = (clientX - left) / width;
-
-    if (interactionPosition < 0.5) {
-      onLeftClick();
-    } else {
-      onRightClick();
-    }
-  };
-
   return (
     <div 
       className={`scene-container ${isTransitioning ? 'transitioning' : ''} ${currentFrame === 'black' ? 'black-background' : ''}`} 
-      onMouseDown={handleInteraction}
-      onTouchStart={handleInteraction}
     >
       {currentFrame !== 'black' && <img src={`/${currentFrame}`} alt={`Current Scene`} />}
-      <div className={`scene-text-container text-${scene.textPosition}`}>
-        <div className={`scene-text text-color-${scene.textColor || 'black'} ${showText ? '' : 'hide'} ${scene.textBox ? 'text-box' : ''}`}>
-          {textLines}
-          {scene.texts[currentTextIndex]?.includes('$input_name$') && (
-            <div className="input-name-container">
-              <input
-                type="text"
-                value={userName}
-                onChange={onNameInput}
-                className="input-name"
-                placeholder="โปรดระบุชื่อ"
-                onClick={(event) => event.stopPropagation()}
-              />
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (onNameSubmit(userName)) {
-                  }
-                }}
-                className="submit-name-button"
-                disabled={userName.trim() === ''}
-              >
-                ตกลง
-              </button>
-            </div>
-          )}
+      {isLastFrame && (
+        <div className={`scene-text-container text-${scene.textPosition}`}>
+          <div className={`scene-text text-color-${scene.textColor || 'black'} ${showText ? '' : 'hide'} ${scene.textBox ? 'text-box' : ''}`}>
+            {textLines}
+            {scene.texts[currentTextIndex]?.includes('$input_name$') && (
+              <div className="input-name-container">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={onNameInput}
+                  className="input-name"
+                  placeholder="โปรดระบุชื่อ"
+                  onClick={(event) => event.stopPropagation()}
+                />
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onNameSubmit(userName)) {
+                    }
+                  }}
+                  className="submit-name-button"
+                  disabled={userName.trim() === ''}
+                >
+                  ตกลง
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {scene.choices && showText && (
+      )}
+      {scene.choices && showText && isLastFrame && (
         <div className="choices-container">
           {scene.choices.map((choice: Choice, index: number) => (
             <button 
@@ -108,12 +91,6 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
             </button>
           ))}
         </div>
-      )}
-      {(scene.leftClick !== undefined || scene.rightClick !== undefined) && !scene.choices && (
-        <>
-          <div className="click-area left" onClick={(e) => { e.stopPropagation(); onLeftClick(); }}></div>
-          <div className="click-area right" onClick={(e) => { e.stopPropagation(); onRightClick(); }}></div>
-        </>
       )}
     </div>
   );

@@ -68,12 +68,14 @@ export type Scene = {
         frames: ['intro0.jpg','intro1.jpg','intro2.jpg','intro3.jpg','intro.gif'],
         texts: ["ภารกิจแรกของ $name$ พร้อมแล้ว\n$name$ ล่ะ พร้อมมั้ย?"],
         textPosition: 'top',
-        nextSceneId: 'city',
+        choices: [
+          { text: "กดเพื่อดูภารภิจ", nextSceneId: "city" },
+        ],
       },
       {
         id: 'city',
         frames: ['city0.jpg','city1.jpg','city2.jpg','city3.jpg'],
-        texts: ["ณ ดินแดนทักษิณ","สถานที่ซึ่งดินแดนทั้งสามถูกผูกรวม\nด้วยเรื่องร้ายในอดีตที่เกิดขึ้นเมื่อ 19 ปีที่แล้ว"],
+        texts: ["ณ ดินแดนทักษิณ", "สถานที่ซึ่งดินแดนทั้งสามถูกผูกรวม\nด้วยเรื่องร้ายในอดีตที่เกิดขึ้นเมื่อ 19 ปีที่แล้ว"],
         textPosition: 'top',
         nextSceneId: 'city2',
       },
@@ -88,7 +90,7 @@ export type Scene = {
       {
         id: 'city3',
         frames: ['city12.jpg','city13.jpg','city14.jpg','city15.jpg'],
-        texts: ["สิ่งที่ชัดเจนที่สุดที่เหตุการณ์ร้ายได้ฝากไว้\nก็คือสัญลักษณ์สีแดงโลหิตที่อกข้างซ้าย"],
+        texts: ["สิ่งที่ชัดเจนที่สุดที่เหตุการณ์ร้ายได้ฝากไว้\nก็คือ สัญลักษณ์สีแดงโลหิต ที่อกข้างซ้าย"],
         textPosition: 'middle',
         textColor: 'white',
         nextSceneId: 'city4',
@@ -140,10 +142,12 @@ export type Scene = {
       {
         id: 'home1',
         frames: ['home1.PNG','home2.PNG','home3.PNG','home4.PNG','home5.PNG','home6.PNG','home7.PNG','home8.PNG','home9.PNG'],
-        texts: ["กดที่ตัวละครเพื่อเข้าไปทักทาย"],
+        texts: [],
         textPosition: 'bottom',
-        leftClick: 'home2',
-        rightClick: 'home3',
+        choices: [
+          { text: "คุยกับคุณแม่", nextSceneId: "home2" },
+          { text: "คุยกับคุณย่า", nextSceneId: "home3" },
+        ],
       },
       {
         id: 'home2',
