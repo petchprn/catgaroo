@@ -25,13 +25,14 @@ const App: React.FC = () => {
     goToNextScene,
     handleChoice,
     loadedScenes,
+    handleNameSubmit,
   } = useSceneLogic();
 
   // DevNav UI
   const showDevNav = true;
 
   return (
-    <div className="App" onClick={handleSceneClick}>
+    <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
       <header className="App-header">
         {currentScene && (
           <SceneRenderer
@@ -46,6 +47,7 @@ const App: React.FC = () => {
             onRightClick={handleRightClick}
             onChoice={handleChoice}
             isLoaded={loadedScenes.has(currentSceneId)}
+            onNameSubmit={handleNameSubmit}
           />
         )}
         {showDevNav && (

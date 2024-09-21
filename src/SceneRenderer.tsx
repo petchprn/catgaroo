@@ -15,6 +15,7 @@ interface SceneRendererProps {
   onRightClick: () => void;
   onChoice: (choiceIndex: number) => void;
   isLoaded: boolean;
+  onNameSubmit: (name: string) => boolean;
 }
 
 const SceneRenderer: React.FC<SceneRendererProps> = ({
@@ -29,6 +30,7 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   onRightClick,
   onChoice,
   isLoaded,
+  onNameSubmit,
 }) => {
   if (!isLoaded) {
     return <div className="loading">Loading...</div>;
@@ -41,7 +43,7 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
     .map((line, index) => <div key={index}>{line.replace(/\$name\$/g, userName)}</div>);
 
   const handleInteraction = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    if (scene.choices) return; // Don't handle interactions if there are choices
+    if (scene.choices || scene.texts[currentTextIndex]?.includes('$input_name$')) return;
 
     const { clientX, currentTarget } = 'touches' in event 
       ? { clientX: event.touches[0].clientX, currentTarget: event.currentTarget }
@@ -73,9 +75,20 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
                 value={userName}
                 onChange={onNameInput}
                 className="input-name"
-                placeholder="Enter your name"
+                placeholder="โปรดระบุชื่อ"
                 onClick={(event) => event.stopPropagation()}
               />
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onNameSubmit(userName)) {
+                  }
+                }}
+                className="submit-name-button"
+                disabled={userName.trim() === ''}
+              >
+                ตกลง
+              </button>
             </div>
           )}
         </div>

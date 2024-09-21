@@ -112,10 +112,16 @@ export const useSceneLogic = () => {
 
   const handleRightClick = useCallback(() => {
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene?.rightClick !== undefined && !isTransitioning) {
-      jumpToScene(currentScene.rightClick.toString());
+    if (currentScene) {
+      if (currentScene.texts[currentTextIndex]?.includes('$input_name$')) {
+        // If we're on the name input scene, don't allow progression
+        return;
+      }
+      if (currentScene.nextSceneId) {
+        jumpToScene(currentScene.nextSceneId);
+      }
     }
-  }, [currentSceneId, isTransitioning, jumpToScene]);
+  }, [currentSceneId, currentTextIndex, jumpToScene]);
 
   const handleChoice = useCallback((choiceIndex: number) => {
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
@@ -146,6 +152,17 @@ export const useSceneLogic = () => {
     setUserName(event.target.value);
   }, []);
 
+  const handleNameSubmit = useCallback((name: string) => {
+    if (name.trim() !== '') {
+      setUserName(name);
+      console.log(`Name submitted: ${name}`);
+      setShowText(true);
+      jumpToScene('intro2');  // Jump to the 'intro2' scene
+      return true;
+    }
+    return false;
+  }, [jumpToScene]);
+
   useEffect(() => {
     preloadImages(currentSceneId);
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
@@ -171,5 +188,6 @@ export const useSceneLogic = () => {
     goToNextScene,
     handleChoice,
     loadedScenes,
+    handleNameSubmit,
   };
 };
