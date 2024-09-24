@@ -150,7 +150,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   z-index: 20;
 }
 
@@ -160,18 +160,19 @@ html, body, #root {
   background-color: white;
   color: black;
   border: 1px solid black;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   font-size: 14px;
   font-weight: normal;
   text-align: center;
-  width: 80%;
-  max-width: 300px;
+  width: 50%;
+  max-width: 250px;
 }
 
 .choice-button:hover {
-  background-color: black;
+  background-color: rgb(161, 167, 172);
+  border: 1px solid black;
   color: white;
 }
 

@@ -431,15 +431,6 @@ export type Choice = {
       },
       {
         id: 'booktogmom16',
-        frames: ['momstry4.png'],
-        texts: ["ฉันฟาเดียนะ","ฉันเคยรู้สึกว่าฉันเป็นผู้หญิงที่โชคดีที่สุดเลย",],
-        textPosition: 'bottom',
-        textColor: 'black',
-        textBox: true,
-        nextSceneId: 'booktogmom17',
-      },
-      {
-        id: 'booktogmom17',
         frames: ['momstry6.png'],
         texts: ["ตั้งแต่แต่งงานมาอยู่บ้านนี้เมื่อ 20 ปีที่แล้ว\n บ้านนี้เคยอบอุ่นมากเลยล่ะ"],
         textPosition: 'bottom',
