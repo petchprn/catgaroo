@@ -5,7 +5,7 @@ export type Choice = {
     nextSceneId: string;
   };
 
-export type Scene = {
+  export type Scene = {
     id: string;
     frames: string[];
     texts: string[];
@@ -13,13 +13,15 @@ export type Scene = {
     textColor?: 'black' | 'red' | 'white';
     textBox?: boolean;
     nextSceneId?: string;
-    
     leftClick?: string;
     rightClick?: string;
     choices?: Choice[];
+    backgroundColor?: 'black' | 'red' | 'white';
   };
   
   export const scenes: Scene[] = [
+
+    //Linear intro scenes
       
     {
         id: 'logo',
@@ -209,6 +211,9 @@ export type Scene = {
         textPosition: 'top',
         nextSceneId: 'home10',
       },
+
+
+      //First Decision
       {
         id: 'home10',
         frames: ['white.jpg'],
@@ -216,11 +221,13 @@ export type Scene = {
         textPosition: 'top',
         choices: [
             { text: "คุยกับคุณแม่และคุณย่า", nextSceneId: "talktogmom0" },
-            { text: "อ่านบันทึกปริศนา", nextSceneId: "book0" },
+            { text: "อ่านบันทึกปริศนา", nextSceneId: "ReadBook1st" },
           ],
       },
+
+      //When user read the book first
       {
-        id: 'book0',
+        id: 'ReadBook1st',
         frames: ['arif-sml1.png','arif-sml2.png','arif-sml2.png'],
         texts: ["อื้ม ฉันก็ว่าดี งั้นเราไปอ่านบันทึกปริศนากัน"],
         textPosition: 'top',
@@ -294,11 +301,225 @@ export type Scene = {
       {
         id: 'book9',
         frames: ['arif_g.png'],
-        texts: ["บันทึกที่ฉันเจอน่าจะเป็นแค่เรื่องราวส่วนหนึ่งเท่านั้น ...,","ฉันคิดว่ายังมีเหตุการณ์อื่น ๆ อีกมากที่เรายังไม่รู้","แต่อย่างน้อย บันทึกนี่ก็ทำให้ฉันเข้าใจอะไรเพิ่มมากขึ้น","เราไปคุยกับแม่และคุณย่าเพื่อหาข้อมูลเพิ่มกันเถอะ"],
+        texts: ["บันทึกที่ฉันเจอน่าจะเป็นแค่เรื่องราวส่วนหนึ่งเท่านั้น ...","ฉันคิดว่ายังมีเหตุการณ์อื่น ๆ อีกมากที่เรายังไม่รู้","แต่อย่างน้อย บันทึกนี่ก็ทำให้ฉันเข้าใจอะไรเพิ่มมากขึ้น","เราไปคุยกับแม่และคุณย่าเพื่อหาข้อมูลเพิ่มกันเถอะ"],
         textPosition: 'top',
         textColor: 'black',
-        nextSceneId: 'home10',
+        nextSceneId: 'booktogmom1',
       },
+      {
+        id: 'booktogmom1',
+        frames: ['gmg_c1.png','gmg_c2.png','gmg_c3.png','gmg_c4.png','gmg_c5.png','gmg_c6.png'],
+        texts: ["อ้าว เจ้าแมว \nมานี่มา มานั่งข้าง ๆ กัน"],
+        textPosition: 'top',
+        textColor: 'black',
+        nextSceneId: 'booktogmom2',
+      },
+      {
+        id: 'booktogmom2',
+        frames: ['gmg_c7.png','gmg_c8.png','gmg_c9.png'],
+        texts: ["ผ่านมาเกือบ 20 ปีแล้วสินะ","ที่บ้านนี้ไม่มีอะไรน่ารักแบบแกเลย","ปี 2547 ฉันจำได้แม่นเลยล่ะ ","ทุก ๆ เรื่องเลวร้ายล้วนมีจุดเริ่มต้น \nและจุดเริ่มต้นของมันคือปีนั้น"],
+        textPosition: 'top',
+        textColor: 'black',
+        nextSceneId: 'booktogmom3',
+      },
+      {
+        id: 'booktogmom3',
+        frames: ['black-d1.png'],
+        texts: ["หลังจากผ่านวันขึ้นปีใหม่ได้แค่ 4 วัน ","ก็เกิดเหตุการณ์ที่พวกเราไม่คาดคิดขึ้น","ในวันที่ 4 มกราคม","กลุ่มกองกำลังติดอาวุธกว่าร้อยคนเข้าปล้นปืน",'ทุกคนเรียกเหตุการณ์นั้นว่า\n“เหตุการณ์ปล้นปืนค่ายปิเหล็ง”'],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom4',
+      },
+      {
+        id: 'booktogmom4',
+        frames: ['school.gif'],
+        texts: ["แต่ก่อนจะปล้นปืน","ก็มีการวางเพลิงที่โรงเรียนทั้ง 20 โรงเรียน\nเพื่อเบี่ยงเบนความสนใจของภาครัฐ"],
+        textPosition: 'top',
+        textColor: 'white',
+        nextSceneId: 'booktogmom5',
+      },
+      {
+        id: 'booktogmom5',
+        frames: ['school2.gif'],
+        texts: ["ก็มีการวางเพลิงที่โรงเรียนทั้ง 20 โรงเรียน\nเพื่อเบี่ยงเบนความสนใจของภาครัฐ"],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom6',
+      },
+      {
+        id: 'booktogmom6',
+        frames: ['black-d1.png','fire-ex.gif'],
+        texts: ["และเช้าวันนั้นก็เป็นเช้าวันสุดท้ายที่ฉันได้เจอกับสามี","เขาพยายามพานักเรียนทุกคนหนีออกมา"],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom7',
+      },
+      {
+        id: 'booktogmom7',
+        frames: ['red2.png'],
+        texts: ["แต่ตัวเขาเองกลับสำลักควันติดอยู่ในนั้น ไม่ได้ออกมา"],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom8',
+      },
+      {
+        id: 'booktogmom8',
+        frames: ['red3.png'],
+        texts: ["ในเพียงความทรงจำของลูกศิษย์\nชาวเมือง และครอบครัวเรา"],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom9',
+      },
+      {
+        id: 'booktogmom9',
+        frames: ['red3.png'],
+        texts: ["ตลอดไป","ตั้งแต่นั้น ความเศร้าในใจพวกเราก็ค่อย ๆ เกิดขึ้น"],
+        textPosition: 'middle',
+        textColor: 'white',
+        nextSceneId: 'booktogmom10',
+      },
+      {
+        id: 'booktogmom10',
+        frames: ['gmom-cry1.gif'],
+        texts: ["เกิดขึ้นพร้อม ๆ กับความไม่สงบความรุนแรง \nและกฎหมายพิเศษที่รัฐประกาศใช้"],
+        textPosition: 'middle',
+        textColor: 'black',
+        nextSceneId: 'booktogmom11',
+      },
+      {
+        id: 'booktogmom11',
+        frames: ['white.jpg'],
+        texts: ["จากที่เราเคยอยู่กันอย่างสงบสุข","บ้านเมืองก็เต็มไปด้วยการเฝ้าระวัง\nจากกองกำลังของภาครัฐ","ความกลัว ความหวาดระแวง"," ก็แวะเวียนมาเยี่ยมเยียนพวกเรา\nทักทายกับความเศร้าโศก\nที่อยู่กับเรามาสักพักแล้ว..."],
+        textPosition: 'middle',
+        textColor: 'black',
+        nextSceneId: 'booktogmom12',
+      },
+      {
+        id: 'booktogmom12',
+        frames: ['gmom-cry2.gif'],
+        texts: ["ฉันคิดถึงช่วงที่พวกเราเคยมีความสุขกันมาก ๆ"],
+        textPosition: 'top',
+        textColor: 'black',
+        nextSceneId: 'booktogmom13',
+      },
+      {
+        id: 'booktogmom13',
+        frames: ['white.jpg','arifcf.gif'],
+        texts: ["นี่เจ้าแมว คุณย่าน่าจะเหนื่อยแล้ว\n เราไปหาฟาเดีย แม่ของฉันกันเถอะ"],
+        textPosition: 'bottom',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom14',
+      },
+      {
+        id: 'booktogmom14',
+        frames: ['momstry1.png','momstry2.png'],
+        texts: ["อ้าวเจ้าแมว ปลาทูเสร็จพอดีเลย\nมานี่สิ ฉันคลุกข้าวให้กิน"],
+        textPosition: 'bottom',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom15',
+      },
+      {
+        id: 'booktogmom15',
+        frames: ['momstry4.png'],
+        texts: ["ฉันฟาเดียนะ","ฉันเคยรู้สึกว่าฉันเป็นผู้หญิงที่โชคดีที่สุดเลย"],
+        textPosition: 'bottom',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom16',
+      },
+      {
+        id: 'booktogmom16',
+        frames: ['momstry4.png'],
+        texts: ["ฉันฟาเดียนะ","ฉันเคยรู้สึกว่าฉันเป็นผู้หญิงที่โชคดีที่สุดเลย",],
+        textPosition: 'bottom',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom17',
+      },
+      {
+        id: 'booktogmom17',
+        frames: ['momstry6.png'],
+        texts: ["ตั้งแต่แต่งงานมาอยู่บ้านนี้เมื่อ 20 ปีที่แล้ว\n บ้านนี้เคยอบอุ่นมากเลยล่ะ"],
+        textPosition: 'bottom',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom18',
+      },
+      {
+        id: 'booktogmom18',
+        frames: ['white.jpg'],
+        texts: ["แต่แปปเดียวคุณพ่อสามีฉันก็เสีย","ในวันที่มีการปล้นปืนที่ค่ายปิเหล็ง"],
+        textPosition: 'middle',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom19',
+      },
+      {
+        id: 'booktogmom19',
+        frames: ['wbw.gif'],
+        texts: ["หลังจากวันนั้น","พวกเราก็อยู่กันด้วยความโศกเศร้า"],
+        textPosition: 'middle',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom20',
+      },
+      {
+        id: 'booktogmom20',
+        frames: ['white.jpg'],
+        texts: ["สามีของฉันเป็นเสาหลักให้กับบ้านหลังนี้"],
+        textPosition: 'top',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom21',
+      },
+      {
+        id: 'booktogmom21',
+        frames: ['dad.png'],
+        texts: ["[คลิ๊กเพื่ิอไปต่อ]"],
+        textPosition: 'top',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: '',
+      },
+      {
+        id: 'booktogmom22',
+        frames: ['white.jpg'],
+        texts: ["แม้ว่าเขาจะเสียใจ\nจากการสูญเสียพ่อของเขาไปแค่ไหน\nเขาก็พยายามเต็มที่เพื่อให้\nฉันกับแม่ของเขามีชีวิตที่ดี","เขาเก็บความเสียใจไว้ข้างใน\nแล้วยิ้มออกมาเป็นกำลังใจ\nให้พวกเราใช้ชีวิตต่อไป","ถึงแม้สถานการณ์จะไม่ปกติเอาเสียเลยก็ตาม"],
+        textPosition: 'top',
+        textColor: 'black',
+        textBox: true,
+        nextSceneId: 'booktogmom21',
+      },
+
+
+
+      //When user talk to gmom first
+      {
+        id: 'talktogmom0',
+        frames: ['arif-sml1.png','arif-sml2.png','arif-sml3.png'],
+        texts: ["อื้ม ฉันก็ว่าดี งั้นเราไปคุยกับคุณย่ากันก่อนเถอะ"],
+        textPosition: 'top',
+        textColor: 'black',
+      },
+      {
+        id: 'talktogmom1',
+        frames: ['gmg_c1.png','gmg_c2.png','gmg_c3.png','gmg_c4.png','gmg_c5.png','gmg_c6.png'],
+        texts: ["อ้าว เจ้าแมว \nมานี่มา มานั่งข้าง ๆ กัน"],
+        textPosition: 'top',
+        textColor: 'black',
+      },
+      {
+        id: 'talktogmom2',
+        frames: ['gmg_c7.png','gmg_c8.png','gmg_c9.png'],
+        texts: ["ผ่านมาเกือบ 20 ปีแล้วสินะ","ที่บ้านนี้ไม่มีอะไรน่ารักแบบแกเลย","ปี 2547 ฉันจำได้แม่นเลยล่ะ ","ทุก ๆ เรื่องเลวร้ายล้วนมีจุดเริ่มต้น \nและจุดเริ่มต้นของมันคือปีนั้น"],
+        textPosition: 'top',
+        textColor: 'black',
+      },
+
+
+      //TBC
       {
         id: 'fire9',
         frames: ['blood_la1.gif'],
@@ -327,26 +548,7 @@ export type Scene = {
         textPosition: 'middle',
         textColor: 'black',
       },
-      {
-        id: 'talktogmom0',
-        frames: ['arif-sml1.png','arif-sml2.png','arif-sml3.png'],
-        texts: ["อื้ม ฉันก็ว่าดี งั้นเราไปคุยกับคุณย่ากันก่อนเถอะ"],
-        textPosition: 'top',
-        textColor: 'black',
-      },
-      {
-        id: 'talktogmom1',
-        frames: ['gmg_c1.png','gmg_c2.png','gmg_c3.png','gmg_c4.png','gmg_c5.png','gmg_c6.png'],
-        texts: ["อ้าว เจ้าแมว \nมานี่มา มานั่งข้าง ๆ กัน"],
-        textPosition: 'top',
-        textColor: 'black',
-      },
-      {
-        id: 'talktogmom2',
-        frames: ['gmg_c7.png','gmg_c8.png','gmg_c9.png'],
-        texts: ["ผ่านมาเกือบ 20 ปีแล้วสินะ","ที่บ้านนี้ไม่มีอะไรน่ารักแบบแกเลย","ปี 2547 ฉันจำได้แม่นเลยล่ะ ","ทุก ๆ เรื่องเลวร้ายล้วนมีจุดเริ่มต้น \nและจุดเริ่มต้นของมันคือปีนั้น"],
-        textPosition: 'top',
-        textColor: 'black',
-      },
+
+
   ];
   

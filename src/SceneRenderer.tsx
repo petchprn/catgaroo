@@ -42,9 +42,11 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
     .map((line, index) => <div key={index}>{line.replace(/\$name\$/g, userName)}</div>);
 
   return (
-    <div 
-      className={`scene-container ${isTransitioning ? 'transitioning' : ''} ${currentFrame === 'black' ? 'black-background' : ''}`} 
-    >
+<div 
+  className={`scene-container ${isTransitioning ? 'transitioning' : ''} ${
+    scene.backgroundColor ? `background-${scene.backgroundColor}` : ''
+  }`} 
+>
       {currentFrame !== 'black' && <img src={`/${currentFrame}`} alt={`Current Scene`} />}
       {isLastFrame && (
         <div className={`scene-text-container text-${scene.textPosition}`}>
@@ -69,7 +71,7 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
                   className="submit-name-button"
                   disabled={userName.trim() === ''}
                 >
-                  ตกลง
+                  ไปต่อ
                 </button>
               </div>
             )}
