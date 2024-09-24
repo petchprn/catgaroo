@@ -12,21 +12,23 @@ export const useSceneLogic = () => {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [loadedScenes, setLoadedScenes] = useState<Set<string>>(new Set());
 
-  const preloadImages = useCallback((sceneId: string) => {
-    const scene = scenes.find(s => s.id === sceneId);
-    if (scene && !loadedScenes.has(sceneId)) {
-      const imagesToLoad = Array.isArray(scene.frames) ? scene.frames : [scene.frames];
-      Promise.all(imagesToLoad.map(src => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.src = src.startsWith('/') ? src : `/${src}`;
-          img.onload = resolve;
-          img.onerror = reject;
+  const preloadImages = useCallback((sceneIds: string[]) => {
+    sceneIds.forEach(sceneId => {
+      const scene = scenes.find(s => s.id === sceneId);
+      if (scene && !loadedScenes.has(sceneId)) {
+        const imagesToLoad = Array.isArray(scene.frames) ? scene.frames : [scene.frames];
+        Promise.all(imagesToLoad.map(src => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src.startsWith('/') ? src : `/${src}`;
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+        })).then(() => {
+          setLoadedScenes(prev => new Set(prev).add(sceneId));
         });
-      })).then(() => {
-        setLoadedScenes(prev => new Set(prev).add(sceneId));
-      });
-    }
+      }
+    });
   }, [loadedScenes]);
 
   useEffect(() => {
@@ -73,9 +75,13 @@ export const useSceneLogic = () => {
         setCurrentTextIndex(0);
         setIsTransitioning(false);
         setShowText(true);
+        // Preload the next scene if it exists
+        if (newScene.nextSceneId) {
+          preloadImages([newScene.nextSceneId]);
+        }
       }, 300);
     }
-  }, []);
+  }, [preloadImages]);
 
   const handleSceneClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLInputElement || isTransitioning) {
@@ -161,10 +167,15 @@ export const useSceneLogic = () => {
   }, [jumpToScene]);
 
   useEffect(() => {
-    preloadImages(currentSceneId);
     const currentScene = scenes.find(scene => scene.id === currentSceneId);
-    if (currentScene && currentScene.nextSceneId) {
-      preloadImages(currentScene.nextSceneId);
+    if (currentScene) {
+      const scenesToPreload = [currentSceneId];
+      if (currentScene.nextSceneId) {
+        scenesToPreload.push(currentScene.nextSceneId);
+      }
+      // Optionally, add more nearby scenes here
+      // For example, you could add the previous scene or the next 2-3 scenes
+      preloadImages(scenesToPreload);
     }
   }, [currentSceneId, preloadImages]);
 
