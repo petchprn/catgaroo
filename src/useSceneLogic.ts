@@ -11,6 +11,7 @@ export const useSceneLogic = () => {
   const [userName, setUserName] = useState<string>('');
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [loadedScenes, setLoadedScenes] = useState<Set<string>>(new Set());
+  const [currentFrame, setCurrentFrame] = useState<string>('');
 
   const preloadImages = useCallback((sceneIds: string[]) => {
     sceneIds.forEach(sceneId => {
@@ -55,7 +56,7 @@ export const useSceneLogic = () => {
     } else {
       id = window.setTimeout(() => {
         setIsTransitioning(false);
-        setShowText(true); // Show text only when the last frame is reached
+        setShowText(true);
       }, 500);
     }
 
@@ -63,6 +64,17 @@ export const useSceneLogic = () => {
       window.clearTimeout(id);
     };
   }, [currentFrameIndex, currentSceneId]);
+
+  useEffect(() => {
+    const currentScene = scenes.find(scene => scene.id === currentSceneId);
+    if (currentScene && Array.isArray(currentScene.frames)) {
+      setCurrentFrame(currentScene.frames[currentFrameIndex]);
+    }
+  }, [currentSceneId, currentFrameIndex]);
+
+  useEffect(() => {
+    console.log(`Current frame updated: ${currentFrame}`);
+  }, [currentFrame]);
 
   const jumpToScene = useCallback((newSceneId: string) => {
     const newScene = scenes.find(scene => scene.id === newSceneId);
@@ -73,6 +85,7 @@ export const useSceneLogic = () => {
         setCurrentSceneId(newSceneId);
         setCurrentFrameIndex(0);
         setCurrentTextIndex(0);
+        setCurrentFrame(newScene.frames[0]);
         setIsTransitioning(false);
         setShowText(true);
         // Preload the next scene if it exists
@@ -81,7 +94,7 @@ export const useSceneLogic = () => {
         }
       }, 300);
     }
-  }, [preloadImages]);
+  }, [preloadImages, scenes]);
 
   const handleSceneClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof HTMLInputElement || isTransitioning) {
@@ -100,28 +113,21 @@ export const useSceneLogic = () => {
       return;
     }
 
-    console.log('Current text index:', currentTextIndex);
-    console.log('Total texts in scene:', currentScene.texts.length);
 
     if (showText) {
       if (currentTextIndex < currentScene.texts.length - 1) {
-        console.log('Moving to next text');
         setShowText(false);
         setTimeout(() => {
           setCurrentTextIndex(prevIndex => {
-            console.log('New text index:', prevIndex + 1);
             return prevIndex + 1;
           });
           setShowText(true);
         }, 300);
       } else if (currentScene.nextSceneId) {
-        console.log('Moving to next scene:', currentScene.nextSceneId);
         jumpToScene(currentScene.nextSceneId);
       } else {
-        console.log('No more texts or next scene');
       }
     } else {
-      console.log('Showing text');
       setShowText(true);
     }
   }, [currentSceneId, currentTextIndex, showText, isTransitioning, jumpToScene]);
@@ -160,7 +166,7 @@ export const useSceneLogic = () => {
       setUserName(name);
       console.log(`Name submitted: ${name}`);
       setShowText(true);
-      jumpToScene('intro2');  // Jump to the 'intro2' scene
+      jumpToScene('intro2');
       return true;
     }
     return false;
@@ -173,14 +179,14 @@ export const useSceneLogic = () => {
       if (currentScene.nextSceneId) {
         scenesToPreload.push(currentScene.nextSceneId);
       }
-      // Optionally, add more nearby scenes here
-      // For example, you could add the previous scene or the next 2-3 scenes
       preloadImages(scenesToPreload);
     }
   }, [currentSceneId, preloadImages]);
 
+  const currentScene = scenes.find(scene => scene.id === currentSceneId);
+
   return {
-    currentScene: scenes.find(scene => scene.id === currentSceneId),
+    currentScene,
     currentSceneId,
     currentFrameIndex,
     currentTextIndex,
@@ -195,5 +201,6 @@ export const useSceneLogic = () => {
     handleChoice,
     loadedScenes,
     handleNameSubmit,
+    currentFrame,
   };
 };

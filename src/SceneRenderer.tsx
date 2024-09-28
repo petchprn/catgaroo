@@ -35,7 +35,6 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
   const currentFrame = Array.isArray(scene.frames) ? scene.frames[currentFrameIndex] : scene.frames;
   const isLastFrame = Array.isArray(scene.frames) && currentFrameIndex === scene.frames.length - 1;
   const currentText = scene.texts[currentTextIndex];
-  console.log('Rendering text:', currentText);
   const textLines = currentText
     ?.replace(/\$input_name\$/g, '')
     .split('\n')

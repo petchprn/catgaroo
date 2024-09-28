@@ -18,7 +18,17 @@ export type Choice = {
     choices?: Choice[];
     backgroundColor?: 'black' | 'red' | 'white';
   };
-  
+
+  export interface AudioTrack {
+    id: string;
+    src: string;
+    startFrame: string;
+    stopFrame: string;
+    volume: number;
+    fadeEffect: boolean;
+    loop?: boolean;
+  }
+
   export const scenes: Scene[] = [
 
     //Linear intro scenes
@@ -301,7 +311,7 @@ export type Choice = {
       {
         id: 'book9',
         frames: ['arif_g.png'],
-        texts: ["บันทึกที่ฉันเจอน่าจะเป็นแค่เรื่องราวส่วนหนึ่งเท่านั้น ...","ฉันคิดว่ายังมีเหตุการณ์อื่น ๆ อีกมากที่เรายังไม่รู้","แต่อย่างน้อย บันทึกนี่ก็ทำให้ฉันเข้าใจอะไรเพิ่มมากขึ้น","เราไปคุยกับแม่และคุณย่าเพื่อหาข้อมูลเพิ่มกันเถอะ"],
+        texts: ["บันทึกที่ฉันเจอน่าจะเป็นแค่เรื่องราวส่วนหนึ่งเท่านั้น ...","ฉันคิดว่ายังมีเหตุการณ์อื่น ๆ อีกมากที่เรายังไม่รู้","แต่อย่างน้อย บันทึกนี่ก็ทำให���ฉันเข้าใจอะไรเพิ่มมากขึ้น","เราไปคุยกับแม่และคุณย่าเพื่อหาข้อมูลเพิ่มกันเถอะ"],
         textPosition: 'top',
         textColor: 'black',
         nextSceneId: 'booktogmom1',
@@ -483,6 +493,33 @@ export type Choice = {
         textBox: true,
         nextSceneId: 'booktogmom21',
       },
+      {
+        id: 'booktogmom23',
+        frames: ['white.jpg','d1-1-5.jpg','d1-1-4.jpg','d1-1-2.jpg','d1-1-1.jpg'],
+        texts: ["จนถึงวันที่ 25 ตุลาคม ปีเดียวกัน\nก็มีการชุมนุมใหญ่เกิดขึ้นในพื้นที่ตากใบ"],
+        textPosition: 'top',
+        textColor: 'white',
+        textBox: true,
+        nextSceneId: 'booktogmom24',
+      },
+      {
+        id: 'booktogmom24',
+        frames: ['d1-1-12.jpg','d1-1-11.jpg','d1-1-10.jpg','d1-1-9.jpg'],
+        texts: ["สามีของฉันเสียชีวิต\nพร้อม ๆ กับเพื่อนร่วมเดินทาง\nอีก 77 ชีวิต"],
+        textPosition: 'top',
+        textColor: 'white',
+        textBox: true,
+        nextSceneId: '',
+      },
+      {
+        id: 'booktogmom26',
+        frames: ['d1-1-12.jpg','d1-1-11.jpg','d1-1-10.jpg','d1-1-9.jpg'],
+        texts: ["สามีของฉันเสียชีวิต\nพร้อม ๆ กับเพื่อนร่วมเดินทาง\nอีก 77 ชีวิต"],
+        textPosition: 'top',
+        textColor: 'white',
+        textBox: true,
+        nextSceneId: '',
+      },
 
 
 
@@ -539,7 +576,6 @@ export type Choice = {
         textPosition: 'middle',
         textColor: 'black',
       },
-
 
   ];
   

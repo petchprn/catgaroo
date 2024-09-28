@@ -6,6 +6,8 @@ import SceneRenderer from './SceneRenderer';
 import DevNav from './DevNav';
 import { useSceneLogic } from './useSceneLogic';
 import { scenes } from './types';
+import AudioManager from './AudioManager';
+import { audioTracks } from './AudioTracks';
 
 const App: React.FC = () => {
   const {
@@ -24,6 +26,7 @@ const App: React.FC = () => {
     handleChoice,
     loadedScenes,
     handleNameSubmit,
+    currentFrame,
   } = useSceneLogic();
 
   // DevNav UI
@@ -55,6 +58,7 @@ const App: React.FC = () => {
             jumpToScene={jumpToScene}
           />
         )}
+        <AudioManager currentFrame={currentFrame} currentSceneId={currentSceneId} audioTracks={audioTracks} />
       </header>
     </div>
   );
