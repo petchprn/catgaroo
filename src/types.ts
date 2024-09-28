@@ -35,7 +35,7 @@ export type Choice = {
       
     {
         id: 'logo',
-        frames: ['logo.png'],
+        frames: ['logo.gif'],
         texts: ["แตะหรือคลิ๊กเพื่อเริ่มเกม"],
         textPosition: 'bottom',
         nextSceneId: 'gameintro',

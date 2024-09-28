@@ -30,7 +30,7 @@ const App: React.FC = () => {
   } = useSceneLogic();
 
   // DevNav UI
-  const showDevNav = true;
+  const showDevNav = false;
 
   return (
     <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
