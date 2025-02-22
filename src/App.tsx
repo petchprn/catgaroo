@@ -1,29 +1,15 @@
 // App.tsx
 
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import SceneRenderer from './SceneRenderer';
 import DevNav from './DevNav';
 import { useSceneLogic } from './useSceneLogic';
-import { Scene, AudioTrack, GameState } from './types';
+import { scenes } from './types';
 import AudioManager from './AudioManager';
-import { audioTracks as initialAudioTracks } from './AudioTracks';
-import { scenes as initialScenes } from './types';
-import { useStoryMachine } from './hooks/useStoryMachine';
-
-const initialGameState: GameState = {
-  inventory: [],
-  flags: {},
-  relationships: {},
-  currentSceneId: 'intro',
-  previousScenes: []
-};
+import { audioTracks } from './AudioTracks';
 
 const App: React.FC = () => {
-  const [audioTracks] = useState<AudioTrack[]>(initialAudioTracks);
-  const [scenes] = useState<Scene[]>(initialScenes);
-  const showDevNav = process.env.NODE_ENV === 'development';
-
   const {
     currentScene,
     currentSceneId,
@@ -41,7 +27,10 @@ const App: React.FC = () => {
     loadedScenes,
     handleNameSubmit,
     currentFrame,
-  } = useSceneLogic(); // Remove scenes parameter
+  } = useSceneLogic();
+
+  // Enable DevNav only in development
+  const showDevNav = process.env.NODE_ENV === 'development';
 
   const {
     gameState,
@@ -66,22 +55,16 @@ const App: React.FC = () => {
             onNameSubmit={handleNameSubmit}
           />
         )}
-
-        <AudioManager 
-          currentFrame={currentFrame}
-          audioTracks={audioTracks}
-        />
-        
         {showDevNav && (
           <DevNav
             currentSceneId={currentSceneId}
             scenes={scenes}
-            audioTracks={audioTracks}
             goToPreviousScene={goToPreviousScene}
             goToNextScene={goToNextScene}
             jumpToScene={jumpToScene}
           />
         )}
+        <AudioManager currentFrame={currentFrame} currentSceneId={currentSceneId} audioTracks={audioTracks} />
       </header>
     </div>
   );

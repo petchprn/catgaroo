@@ -25,21 +25,27 @@ const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, currentSceneI
   useEffect(() => {
     audioTracks.forEach(track => {
       const audio = audioRefs.current[track.id];
-      if (!audio) return;
-
-      const shouldStart = currentFrame === track.startFrame || currentSceneId === track.startFrame;
-      const shouldStop = currentFrame === track.stopFrame || currentSceneId === track.stopFrame;
-
-      if (shouldStart && !playingTracks.current.has(track.id)) {
-        audio.play().catch(console.error);
+      if ((currentFrame === track.startFrame || currentSceneId === track.startFrame) && !playingTracks.current.has(track.id)) {
+        console.log(`Starting audio: ${track.id}`);
+        audio.play().catch(e => console.error("Error playing audio:", e));
         playingTracks.current.add(track.id);
-      } else if (shouldStop && playingTracks.current.has(track.id)) {
+      } else if ((currentFrame === track.stopFrame || currentSceneId === track.stopFrame) && playingTracks.current.has(track.id)) {
+        console.log(`Stopping audio: ${track.id}`);
         audio.pause();
         audio.currentTime = 0;
         playingTracks.current.delete(track.id);
       }
     });
   }, [currentFrame, currentSceneId, audioTracks]);
+
+  useEffect(() => {
+    playingTracks.current.forEach(trackId => {
+      const audio = audioRefs.current[trackId];
+      if (audio && audio.paused) {
+        audio.play().catch(e => console.error("Error resuming audio:", e));
+      }
+    });
+  });
 
   return null;
 };
