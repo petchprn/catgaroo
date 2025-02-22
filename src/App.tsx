@@ -5,10 +5,19 @@ import './App.css';
 import SceneRenderer from './SceneRenderer';
 import DevNav from './DevNav';
 import { useSceneLogic } from './useSceneLogic';
-import { Scene, AudioTrack } from './types';
+import { Scene, AudioTrack, GameState } from './types';
 import AudioManager from './AudioManager';
 import { audioTracks as initialAudioTracks } from './AudioTracks';
 import { scenes as initialScenes } from './types';
+import { useStoryMachine } from './hooks/useStoryMachine';
+
+const initialGameState: GameState = {
+  inventory: [],
+  flags: {},
+  relationships: {},
+  currentSceneId: 'intro',
+  previousScenes: []
+};
 
 const App: React.FC = () => {
   const [audioTracks] = useState<AudioTrack[]>(initialAudioTracks);
@@ -34,8 +43,14 @@ const App: React.FC = () => {
     currentFrame,
   } = useSceneLogic(); // Remove scenes parameter
 
+  const {
+    gameState,
+    handleInteraction,
+    updateState
+  } = useStoryMachine(initialScenes, initialGameState);
+
   return (
-    <div className="App" onClick={currentScene?.texts?.[currentTextIndex]?.text?.includes('$input_name$') ? undefined : handleSceneClick}>
+    <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
       <header className="App-header">
         {currentScene && (
           <SceneRenderer
