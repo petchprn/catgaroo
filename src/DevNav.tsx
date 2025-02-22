@@ -43,7 +43,6 @@ const DevNav: React.FC<DevNavProps> = ({
       </select>
       
       <div className="scene-title">
-        <div className="formatted-id">{formatSceneId(currentSceneId)}</div>
         <div className="original-id">({currentSceneId})</div>
       </div>
     </div>

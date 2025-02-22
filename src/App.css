@@ -284,7 +284,6 @@ html, body, #root {
   background: rgba(0,0,0,0.1);
   border-radius: 4px;
 }
-
 .formatted-id {
   font-weight: 600;
   color: #2b8a3e;
@@ -293,6 +292,7 @@ html, body, #root {
 
 .original-id {
   font-size: 0.8em;
-  color: #666;
+  color: #ffffff;
   font-family: monospace;
 }
+
