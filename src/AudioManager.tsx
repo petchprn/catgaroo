@@ -4,9 +4,10 @@ import { AudioTrack, Scene } from './types';
 interface AudioManagerProps {
   currentFrame: string;
   audioTracks: AudioTrack[];
+  currentScene?: Scene;
 }
 
-const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, audioTracks }) => {
+const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, audioTracks, currentScene }) => {
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
   const activeTracks = useRef<Set<string>>(new Set());
 
@@ -24,23 +25,25 @@ const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, audioTracks }
 
   // Main audio control logic
   useEffect(() => {
-    audioTracks.forEach(track => {
+    const sceneAudio = audioTracks.filter(t => 
+      t.startFrame === currentScene?.id || 
+      t.stopFrame === currentScene?.id
+    );
+
+    sceneAudio.forEach(track => {
       const audio = audioRefs.current[track.id];
       if (!audio) return;
 
-      const shouldStart = currentFrame === track.startFrame;
-      const shouldStop = currentFrame === track.stopFrame;
-
-      if (shouldStart && !activeTracks.current.has(track.id)) {
+      if (currentScene?.id === track.startFrame) {
         audio.play().catch(console.error);
         activeTracks.current.add(track.id);
-      } else if (shouldStop && activeTracks.current.has(track.id)) {
+      } else if (currentScene?.id === track.stopFrame) {
         audio.pause();
         audio.currentTime = 0;
         activeTracks.current.delete(track.id);
       }
     });
-  }, [currentFrame, audioTracks]);
+  }, [currentScene?.id, audioTracks]);
 
   // Cleanup on unmount
   useEffect(() => {

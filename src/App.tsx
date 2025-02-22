@@ -35,7 +35,7 @@ const App: React.FC = () => {
   } = useSceneLogic(); // Remove scenes parameter
 
   return (
-    <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
+    <div className="App" onClick={currentScene?.texts?.[currentTextIndex]?.text?.includes('$input_name$') ? undefined : handleSceneClick}>
       <header className="App-header">
         {currentScene && (
           <SceneRenderer

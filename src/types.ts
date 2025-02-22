@@ -15,18 +15,35 @@ export interface AudioTrack {
   loop?: boolean;
 }
 
+export interface Dialogue {
+  text: string;
+  position?: 'top'|'bottom'|'center';
+  character?: string;
+  delay?: number;
+}
+
 export interface Scene {
   id: string;
-  frames: string[];
-  texts: string[];
-  textPosition?: 'top' | 'middle' | 'bottom';
-  textColor?: 'black' | 'red' | 'white';
-  textBox?: boolean;
-  nextSceneId?: string;
-  leftClick?: string;
-  rightClick?: string;
-  choices?: Choice[];
-  backgroundColor?: 'black' | 'red' | 'white';
+  frames: string | string[];
+  texts?: Dialogue[];
+  transitions: Transition[];
+  conditions?: Record<string, unknown>;
+  textPosition?: 'top'|'bottom'|'center';
+}
+
+export interface Transition {
+  targetSceneId: string;
+  condition?: (state: GameState) => boolean;
+  trigger: 'auto' | 'click' | 'choice';
+  preload?: boolean;
+}
+
+export interface GameState {
+  inventory: string[];
+  flags: Record<string, boolean>;
+  relationships: Record<string, number>;
+  currentSceneId: string;
+  previousScenes: string[];
 }
 
 export const scenes: Scene[] = [
