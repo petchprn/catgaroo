@@ -1,11 +1,12 @@
 // DevNav.tsx
 
 import React, { useState, useEffect } from 'react';
-import { Scene } from './types';
+import { Scene, AudioTrack } from './types';
 
 interface DevNavProps {
   currentSceneId: string;
   scenes: Scene[];
+  audioTracks: AudioTrack[];
   goToPreviousScene: () => void;
   goToNextScene: () => void;
   jumpToScene: (sceneId: string) => void;
@@ -14,6 +15,7 @@ interface DevNavProps {
 const DevNav: React.FC<DevNavProps> = ({
   currentSceneId,
   scenes,
+  audioTracks,
   goToPreviousScene,
   goToNextScene,
   jumpToScene,

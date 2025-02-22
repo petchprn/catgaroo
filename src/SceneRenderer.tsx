@@ -46,7 +46,7 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
     scene.backgroundColor ? `background-${scene.backgroundColor}` : ''
   }`} 
 >
-      {currentFrame !== 'black' && <img src={`/${currentFrame}`} alt={`Current Scene`} />}
+      {currentFrame !== 'black' && <img src={currentFrame} alt="Current Scene" />}
       {isLastFrame && (
         <div className={`scene-text-container text-${scene.textPosition}`}>
           <div className={`scene-text text-color-${scene.textColor || 'black'} ${showText ? '' : 'hide'} ${scene.textBox ? 'text-box' : ''}`}>
