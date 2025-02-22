@@ -1,15 +1,20 @@
 // App.tsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import SceneRenderer from './SceneRenderer';
 import DevNav from './DevNav';
 import { useSceneLogic } from './useSceneLogic';
-import { scenes } from './types';
+import { Scene, AudioTrack } from './types';
 import AudioManager from './AudioManager';
-import { audioTracks } from './AudioTracks';
+import { audioTracks as initialAudioTracks } from './AudioTracks';
+import { scenes as initialScenes } from './types';
 
 const App: React.FC = () => {
+  const [audioTracks] = useState<AudioTrack[]>(initialAudioTracks);
+  const [scenes] = useState<Scene[]>(initialScenes);
+  const showDevNav = process.env.NODE_ENV === 'development';
+
   const {
     currentScene,
     currentSceneId,
@@ -27,10 +32,7 @@ const App: React.FC = () => {
     loadedScenes,
     handleNameSubmit,
     currentFrame,
-  } = useSceneLogic();
-
-  // Enable DevNav only in development
-  const showDevNav = process.env.NODE_ENV === 'development';
+  } = useSceneLogic(); // Remove scenes parameter
 
   return (
     <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
@@ -49,16 +51,19 @@ const App: React.FC = () => {
             onNameSubmit={handleNameSubmit}
           />
         )}
+
+        <AudioManager currentFrame={currentFrame} audioTracks={audioTracks} />
+        
         {showDevNav && (
           <DevNav
             currentSceneId={currentSceneId}
             scenes={scenes}
+            audioTracks={audioTracks}
             goToPreviousScene={goToPreviousScene}
             goToNextScene={goToNextScene}
             jumpToScene={jumpToScene}
           />
         )}
-        <AudioManager currentFrame={currentFrame} currentSceneId={currentSceneId} audioTracks={audioTracks} />
       </header>
     </div>
   );

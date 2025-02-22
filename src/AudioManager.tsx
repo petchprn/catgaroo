@@ -1,16 +1,21 @@
 import React, { useEffect, useRef } from 'react';
-import { AudioTrack } from './types';
+import { AudioTrack, Scene } from './types';
 
 interface AudioManagerProps {
   currentFrame: string;
-  currentSceneId: string;
   audioTracks: AudioTrack[];
 }
 
-const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, currentSceneId, audioTracks }) => {
-  const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
-  const playingTracks = useRef<Set<string>>(new Set());
+interface AudioManagerProps {
+  currentFrame: string;
+  audioTracks: AudioTrack[];
+}
 
+const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, audioTracks }) => {
+  const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
+  const activeTracks = useRef<Set<string>>(new Set());
+
+  // Preload audio when tracks change
   useEffect(() => {
     audioTracks.forEach(track => {
       if (!audioRefs.current[track.id]) {
@@ -22,30 +27,38 @@ const AudioManager: React.FC<AudioManagerProps> = ({ currentFrame, currentSceneI
     });
   }, [audioTracks]);
 
+  // Main audio control logic
   useEffect(() => {
     audioTracks.forEach(track => {
       const audio = audioRefs.current[track.id];
-      if ((currentFrame === track.startFrame || currentSceneId === track.startFrame) && !playingTracks.current.has(track.id)) {
-        console.log(`Starting audio: ${track.id}`);
-        audio.play().catch(e => console.error("Error playing audio:", e));
-        playingTracks.current.add(track.id);
-      } else if ((currentFrame === track.stopFrame || currentSceneId === track.stopFrame) && playingTracks.current.has(track.id)) {
-        console.log(`Stopping audio: ${track.id}`);
+      if (!audio) return;
+
+      const shouldStart = currentFrame === track.startFrame;
+      const shouldStop = currentFrame === track.stopFrame;
+
+      if (shouldStart && !activeTracks.current.has(track.id)) {
+        audio.play().catch(console.error);
+        activeTracks.current.add(track.id);
+      } else if (shouldStop && activeTracks.current.has(track.id)) {
         audio.pause();
         audio.currentTime = 0;
-        playingTracks.current.delete(track.id);
+        activeTracks.current.delete(track.id);
       }
     });
-  }, [currentFrame, currentSceneId, audioTracks]);
+  }, [currentFrame, audioTracks]);
 
+  // Cleanup on unmount
   useEffect(() => {
-    playingTracks.current.forEach(trackId => {
-      const audio = audioRefs.current[trackId];
-      if (audio && audio.paused) {
-        audio.play().catch(e => console.error("Error resuming audio:", e));
-      }
-    });
-  });
+    return () => {
+      activeTracks.current.forEach(trackId => {
+        const audio = audioRefs.current[trackId];
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
+    };
+  }, []);
 
   return null;
 };
