@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { scenes } from './types';
 
 export const useSceneLogic = () => {
-  const [currentSceneId, setCurrentSceneId] = useState<string>(scenes[0].id);
+  const [currentSceneId, setCurrentSceneId] = useState<string>(scenes[0]?.id || '');
   const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
   const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
   const [showText, setShowText] = useState<boolean>(false);
@@ -21,7 +21,7 @@ export const useSceneLogic = () => {
         Promise.all(imagesToLoad.map(src => {
           return new Promise((resolve, reject) => {
             const img = new Image();
-            img.src = src.startsWith('/') ? src : `/${src}`;
+            img.src = src;
             img.onload = resolve;
             img.onerror = reject;
           });
@@ -36,7 +36,7 @@ export const useSceneLogic = () => {
     scenes.forEach(scene => {
       scene.frames.forEach(src => {
         const img = new Image();
-        img.src = src.startsWith('/') ? src : `/${src}`;
+        img.src = src;
       });
     });
   }, []);
@@ -85,10 +85,15 @@ export const useSceneLogic = () => {
         setCurrentSceneId(newSceneId);
         setCurrentFrameIndex(0);
         setCurrentTextIndex(0);
-        setCurrentFrame(newScene.frames[0]);
+        setCurrentFrame(
+          Array.isArray(newScene.frames) && newScene.frames.length > 0 
+            ? newScene.frames[0]
+            : typeof newScene.frames === 'string' 
+              ? newScene.frames
+              : 'black' // fallback
+        );
         setIsTransitioning(false);
         setShowText(true);
-        // Preload the next scene if it exists
         if (newScene.nextSceneId) {
           preloadImages([newScene.nextSceneId]);
         }

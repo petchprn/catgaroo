@@ -29,8 +29,11 @@ const App: React.FC = () => {
     currentFrame,
   } = useSceneLogic();
 
-  // DevNav UI
-  const showDevNav = false;
+  // Enable DevNav only in development
+  const showDevNav = process.env.NODE_ENV === 'development';
+
+  // Add smooth transition class
+  const devNavClass = showDevNav ? 'dev-nav-enter' : 'dev-nav-exit';
 
   return (
     <div className="App" onClick={currentScene?.texts[currentTextIndex]?.includes('$input_name$') ? undefined : handleSceneClick}>
