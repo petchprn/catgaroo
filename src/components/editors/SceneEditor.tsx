@@ -8,7 +8,7 @@ interface SceneEditorProps {
 }
 
 const SceneEditor: React.FC<SceneEditorProps> = ({ scene, onSave, onCancel }) => {
-  const [editedScene, setEditedScene] = React.useState<Scene>(scene);
+  const [editedScene] = React.useState<Scene>(scene);
 
   return (
     <div className="editor-modal">

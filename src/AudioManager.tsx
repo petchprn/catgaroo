@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { AudioTrack, Scene } from './types';
+import { AudioTrack } from './types';
 
 interface AudioManagerProps {
   currentFrame: string;

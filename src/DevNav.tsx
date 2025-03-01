@@ -15,7 +15,6 @@ interface DevNavProps {
 const DevNav: React.FC<DevNavProps> = ({
   currentSceneId,
   scenes,
-  audioTracks,
   goToPreviousScene,
   goToNextScene,
   jumpToScene,

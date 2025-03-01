@@ -13,7 +13,7 @@ import { scenes as initialScenes } from './types';
 const App: React.FC = () => {
   const [audioTracks] = useState<AudioTrack[]>(initialAudioTracks);
   const [scenes] = useState<Scene[]>(initialScenes);
-  const showDevNav = process.env.NODE_ENV === 'development';
+  const showDevNav = true;
 
   const {
     currentScene,
